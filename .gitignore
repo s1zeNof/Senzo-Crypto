@@ -1,0 +1,28 @@
+# Середовище і секрети
+.env
+.env.*
+.firebase/
+firebase-debug.log
+
+# Білди
+dist/
+functions/node_modules/
+node_modules/
+
+# IDE / ОС сміття
+.DS_Store
+Thumbs.db
+
+# Логи
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Кеші
+.cache/
+*.cache
+*.tsbuildinfo
+
+# Сервісні
+.vscode/
+.idea/
