@@ -21,7 +21,7 @@ export function Shell() {
         className="min-h-[calc(100dvh-56px)] transition-[margin] duration-200"
         style={{ marginLeft: user ? (sidebarOpen ? W : 0) : 0 }}
       >
-        <main className="container mx-auto px-4 py-6">
+        <main className="mx-auto max-w-7xl px-4 py-6 min-w-0">
           <Outlet />
         </main>
       </div>

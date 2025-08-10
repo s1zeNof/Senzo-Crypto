@@ -19,34 +19,45 @@ function getNextTier(tiers: StatusTier[], xp: number): StatusTier | null {
 }
 
 function Card(props: React.HTMLAttributes<HTMLDivElement>) {
-  return <div {...props} className={cn("rounded-xl border border-border bg-card/70 p-4 backdrop-blur", props.className)} />
+  return (
+    <div
+      {...props}
+      className={cn(
+        "rounded-xl border border-border bg-card/70 p-4 backdrop-blur min-w-0", // важливо: min-w-0
+        props.className
+      )}
+    />
+  )
 }
 
 function Roadmap({ tiers, xp }: { tiers: StatusTier[]; xp: number }) {
   return (
-    <div className="overflow-x-auto">
-      <div className="flex min-w-[720px] items-stretch gap-3">
-        {tiers.map(t => {
-          const unlocked = xp >= t.xpFrom
-          return (
-            <div
-              key={t.id}
-              className={cn(
-                "relative w-44 shrink-0 rounded-lg border p-3 transition-transform",
-                unlocked ? "border-cyan-400/40 bg-cyan-400/10 hover:-translate-y-0.5"
-                         : "border-border bg-card/60 opacity-70"
-              )}
-              title={t.desc}
-            >
-              <div className="text-xs opacity-70">LV {t.level}</div>
-              <div className="mt-1 flex items-center gap-2 font-medium">
-                <span>{t.emoji}</span> <span>{t.title}</span>
+    <div className="overflow-x-auto">                 {/* скрол лише всередині картки */}
+      <div className="w-max">                         {/* ширина дорівнює контенту */}
+        <div className="flex items-stretch gap-3">
+          {tiers.map(t => {
+            const unlocked = xp >= t.xpFrom
+            return (
+              <div
+                key={t.id}
+                className={cn(
+                  "relative w-44 shrink-0 rounded-lg border p-3 transition-transform",
+                  unlocked
+                    ? "border-cyan-400/40 bg-cyan-400/10 hover:-translate-y-0.5"
+                    : "border-border bg-card/60 opacity-70"
+                )}
+                title={t.desc}
+              >
+                <div className="text-xs opacity-70">LV {t.level}</div>
+                <div className="mt-1 flex items-center gap-2 font-medium">
+                  <span>{t.emoji}</span> <span>{t.title}</span>
+                </div>
+                <div className="mt-2 text-xs opacity-70">{t.xpFrom} XP</div>
+                {!unlocked && <div className="absolute right-2 top-2 text-xs opacity-60">🔒</div>}
               </div>
-              <div className="mt-2 text-xs opacity-70">{t.xpFrom} XP</div>
-              {!unlocked && <div className="absolute right-2 top-2 text-xs opacity-60">🔒</div>}
-            </div>
-          )
-        })}
+            )
+          })}
+        </div>
       </div>
     </div>
   )
@@ -102,13 +113,16 @@ export default function Profile() {
     setLoadingInit(false)
   }
 
-  // демо-активність для графіка
+  // демо-активність для графіка (UI)
   const chartData = useMemo(
-    () => Array.from({ length: 14 }).map((_, i) => ({ d: `D${i + 1}`, v: Math.max(0, Math.round(30 + Math.sin(i / 2) * 20 + (i * 2))) })),
+    () => Array.from({ length: 14 }).map((_, i) => ({
+      d: `D${i + 1}`,
+      v: Math.max(0, Math.round(30 + Math.sin(i / 2) * 20 + (i * 2))),
+    })),
     []
   )
 
-  // умовний візуальний прогрес (замінемо на реальні метрики пізніше)
+  // умовний візуальний прогрес (замінимо на реальні метрики)
   const progress = {
     learn: Math.min(100, Math.round(xp.trader / 150 * 10)),
     practice: Math.min(100, Math.round(xp.trader / 150 * 8)),
@@ -126,9 +140,9 @@ export default function Profile() {
   }, [])
 
   return (
-    <div className="grid gap-6 lg:grid-cols-3">
+    <div className="grid gap-6 lg:grid-cols-3 min-w-0">            {/* важливо: min-w-0 */}
       {/* left column */}
-      <div className="lg:col-span-2 grid gap-6">
+      <div className="lg:col-span-2 grid gap-6 min-w-0">          {/* важливо: min-w-0 */}
         <Card className="overflow-hidden">
           <div className="relative">
             <div className="absolute -top-24 -right-20 h-72 w-72 rounded-full opacity-25 blur-3xl bg-cyan-400/40 animate-float" />
@@ -186,7 +200,7 @@ export default function Profile() {
             <div className="font-medium">Активність (14 днів)</div>
             <div className="text-xs opacity-70">тести/практика/сим</div>
           </div>
-          <div className="h-48">
+          <div className="h-48 min-w-0">                          {/* важливо: min-w-0 */}
             <ResponsiveContainer width="100%" height="100%">
               <LineChart data={chartData} margin={{ left: 0, right: 8, top: 10, bottom: 0 }}>
                 <XAxis dataKey="d" hide />
@@ -253,7 +267,7 @@ export default function Profile() {
       </div>
 
       {/* right column */}
-      <div className="grid gap-6">
+      <div className="grid gap-6 min-w-0">                         {/* важливо: min-w-0 */}
         <Card className="relative overflow-hidden">
           <div className="absolute -right-6 -top-6 h-24 w-24 rounded-full bg-cyan-400/30 blur-2xl" />
           <div className="mb-2 text-xs opacity-70">Streak</div>
