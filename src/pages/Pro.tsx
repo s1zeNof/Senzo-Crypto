@@ -1,15 +1,21 @@
-import { Link } from "react-router-dom"
+// src/pages/Practice.tsx
 
-export default function Pro() {
+import { RiskTrainer } from "@/components/practice/RiskTrainer";
+
+const PracticePage = () => {
   return (
-    <div className="grid gap-3 max-w-xl">
-      <h2 className="text-xl font-semibold">Pro доступ</h2>
-      <ul className="text-sm list-disc pl-5 opacity-90">
-        <li>Симулятор ф’ючерсів</li>
-        <li>Backtest Lite</li>
-        <li>Авторські треки/стратегії</li>
-      </ul>
-      <Link to="#" className="mt-2 px-4 py-2 rounded-md bg-primary text-black w-max">Активувати</Link>
+    <div className="p-4 md:p-8">
+      <h1 className="text-3xl font-bold mb-6">Practice Hub</h1>
+      <div className="flex justify-center">
+        <RiskTrainer />
+      </div>
+      
+      {/* В майбутньому тут будуть інші тренажери:
+        <CandlesTrainer />
+        <PatternLab />
+      */}
     </div>
-  )
-}
+  );
+};
+
+export default PracticePage;
