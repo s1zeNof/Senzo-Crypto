@@ -1,26 +1,22 @@
 // firestore.rules
-
 rules_version = '2';
 service cloud.firestore {
-  match /databases/{database}/documents {
-    
-    // Функція для перевірки, чи є користувач власником документа
+  match /databases/{db}/documents {
     function isOwner(uid) {
       return request.auth != null && request.auth.uid == uid;
     }
 
-    // Дозволяє користувачу створювати свій профіль та читати/оновлювати його
     match /users/{uid} {
-      allow read, update: if isOwner(uid);
-      allow create: if request.auth != null; // Дозволити створення, якщо користувач залогінений
+      allow read, write: if isOwner(uid);
     }
 
-    // Публічні навчальні треки
+    match /{col=checklists|practice|sim|backtests|web3}/{uid=**}/{doc=**} {
+      allow read, write: if isOwner(uid);
+    }
+
     match /learnTracks/{trackId} {
       allow read: if true;
-      allow write: if false; // Тільки адмін через Cloud Functions
+      allow write: if false;
     }
-
-    // TODO: Додати правила для інших колекцій (userProgress, sim, backtests, etc.)
   }
 }

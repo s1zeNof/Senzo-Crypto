@@ -1,24 +1,24 @@
 // src/pages/Practice.tsx
+import { Link } from "react-router-dom";
 
-import { RiskTrainer } from "@/components/practice/RiskTrainer";
-import { CandlesTrainer } from "@/components/practice/CandlesTrainer";
-import { PatternLab } from "@/components/practice/PatternLab";
-
-const PracticePage = () => {
+export default function Practice() {
   return (
-    <div className="p-4 md:p-8 space-y-8">
-      <h1 className="text-3xl font-bold">Practice Hub</h1>
-
-      <div className="flex flex-wrap justify-center gap-8">
-        <RiskTrainer />
-        <CandlesTrainer />
-      </div>
-
-      <div>
-        <PatternLab />
-      </div>
+    <div className="grid gap-6 md:grid-cols-2">
+      <Link to="/practice/risk-trainer" className="rounded-lg bg-card p-4 hover:bg-muted/50 transition-colors block">
+        <h3 className="mb-2 font-semibold">Risk Trainer</h3>
+        <p className="text-sm opacity-70">Відпрацюйте розрахунок розміру позиції та управління ризиками в різних сценаріях.</p>
+        <div className="mt-4 text-xs text-cyan-400">Перейти до тренажера →</div>
+      </Link>
+      <Link to="/practice/candles-trainer" className="rounded-lg bg-card p-4 hover:bg-muted/50 transition-colors block">
+        <h3 className="mb-2 font-semibold">Candles Trainer</h3>
+        <p className="text-sm opacity-70">Навчіться швидко розпізнавати ключові свічкові патерни в ізоляції.</p>
+        <div className="mt-4 text-xs text-cyan-400">Перейти до тренажера →</div>
+      </Link>
+      <Link to="/practice/candles-context" className="rounded-lg bg-card p-4 hover:bg-muted/50 transition-colors block md:col-span-2">
+        <h3 className="mb-2 font-semibold">Candles Trainer (в контексті) ✨</h3>
+        <p className="text-sm opacity-70">Новий тренажер! Знаходьте патерни на реальному графіку BTCUSDT, щоб розуміти ринковий контекст.</p>
+        <div className="mt-4 text-xs text-cyan-400">Перейти до тренажера →</div>
+      </Link>
     </div>
   );
-};
-
-export default PracticePage;
+}

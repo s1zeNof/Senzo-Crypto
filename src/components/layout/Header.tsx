@@ -1,67 +1,58 @@
-import { useNavigate } from "react-router-dom"
-import { useState } from "react"
-import { useUI } from "@/store/ui"
+// src/components/layout/Header.tsx
+import { useNavigate, Link } from "react-router-dom"
 import { useAuth } from "@/components/auth/AuthProvider"
 import { auth } from "@/lib/firebase"
 import { signOut } from "firebase/auth"
-import { cn } from "@/lib/utils"
+import { useUI } from "@/store/ui"
+import { Menu, X } from 'lucide-react'
 
 export function Header() {
   const { toggleSidebar } = useUI()
   const { user } = useAuth()
   const nav = useNavigate()
-  const [q,setQ] = useState("")
 
   return (
-    <header className="sticky top-0 z-50 border-b border-border bg-card/70 backdrop-blur">
-      <div className="mx-auto grid h-14 grid-cols-[auto,1fr,auto] items-center gap-3 px-3 md:px-6">
-        {/* logo + toggle */}
-        <div className="flex items-center gap-2">
-          {user && (
-            <button onClick={toggleSidebar} className="rounded-md border border-border bg-muted/60 p-1.5 hover:bg-muted">
-              <svg width="18" height="18" viewBox="0 0 24 24"><path fill="currentColor" d="M3 6h18v2H3zm0 5h12v2H3zm0 5h18v2H3z"/></svg>
-            </button>
-          )}
-          <div onClick={()=>nav("/")} className="cursor-pointer select-none font-[var(--font-title)] text-lg tracking-wide">
-            Senzo <span className="text-cyan-400">Crypto</span>
-          </div>
+    <header className="sticky top-0 z-30 border-b border-border bg-card/95 backdrop-blur-sm">
+      <div className="mx-auto flex h-14 items-center gap-4 px-4 md:px-6">
+        {user && (
+          <button onClick={toggleSidebar} className="md:hidden rounded-md p-1.5 hover:bg-muted">
+            <Menu size={20} />
+          </button>
+        )}
+        
+        <div className="hidden md:flex items-center gap-2">
+          {/* Desktop Logo is in the Sidebar now */}
         </div>
 
-        {/* centered search */}
-        <form
-          onSubmit={(e)=>{e.preventDefault(); if(q.trim()) nav(`/learn?search=${encodeURIComponent(q.trim())}`)}}
-          className="mx-auto w-full max-w-xl"
-        >
-          <input
-            className={cn(
-              "w-full rounded-md border border-border bg-muted/60 px-3 py-1.5 text-sm outline-none",
-              "focus:ring-2 focus:ring-cyan-400/40"
-            )}
-            placeholder="Пошук по статтях, треках, інструментах…"
-            value={q} onChange={e=>setQ(e.target.value)}
-          />
-        </form>
+        {/* Mobile Logo */}
+        <Link to="/" className="font-semibold tracking-wide flex items-center gap-2 md:hidden">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="text-primary">
+              <path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+              <path d="M2 17L12 22L22 17" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+              <path d="M2 12L12 17L22 12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
+            <span>Senzo</span>
+        </Link>
 
-        {/* avatar */}
         <div className="ml-auto flex items-center gap-3">
           {user ? (
-            <button
-              onClick={()=>nav("/profile")}
-              className="h-8 w-8 overflow-hidden rounded-full ring-1 ring-border hover:ring-cyan-400/50 transition"
-              title="Профіль"
-            >
-              {user.photoURL
-                ? <img src={user.photoURL} className="h-full w-full object-cover" />
-                : <div className="flex h-full w-full items-center justify-center text-sm">{(user.displayName||user.email||"U").slice(0,1).toUpperCase()}</div>}
-            </button>
+            <div className="flex items-center gap-2">
+              <button
+                onClick={()=>nav("/profile")}
+                className="h-9 w-9 overflow-hidden rounded-full ring-1 ring-border hover:ring-primary/50 transition"
+                title="Профіль"
+              >
+                {user.photoURL
+                  ? <img src={user.photoURL} alt="User avatar" className="h-full w-full object-cover" />
+                  : <div className="flex h-full w-full items-center justify-center text-sm font-bold bg-muted">{(user.displayName||user.email||"U").slice(0,1).toUpperCase()}</div>}
+              </button>
+              <button onClick={()=>signOut(auth)} className="hidden md:block rounded-md border border-border px-3 py-1.5 text-xs hover:bg-muted/60">
+                Вийти
+              </button>
+            </div>
           ) : (
             <button onClick={()=>nav("/auth")} className="rounded-md border border-border bg-muted/60 px-3 py-1.5 text-sm hover:bg-muted">
               Увійти
-            </button>
-          )}
-          {user && (
-            <button onClick={()=>signOut(auth)} className="hidden md:block rounded-md border border-border px-3 py-1.5 text-xs hover:bg-muted/60">
-              Вийти
             </button>
           )}
         </div>
